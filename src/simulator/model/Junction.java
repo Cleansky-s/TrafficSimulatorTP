@@ -66,7 +66,8 @@ public class Junction extends SimulatedObject{
 	
 	@Override
 	void advance(int time) {
-		// TODO Auto-generated method stub
+
+
 		
 	}
 

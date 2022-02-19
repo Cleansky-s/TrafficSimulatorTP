@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public abstract class Road extends SimulatedObject{
 	
 	
-	private Junction srcJunc,destJunc;
+	private Junction srcJunc,destJunc; //dest and origin junction
 	private int length;
 	private int maxSpeed;
 	private int contLimit;
