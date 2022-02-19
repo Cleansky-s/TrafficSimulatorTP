@@ -66,9 +66,10 @@ public class Junction extends SimulatedObject{
 	
 	@Override
 	void advance(int time) {
-
-
-		
+		for(int i = 0;i<listRoadEnter.size();i++){
+			for(int j = 0;j<extractStrategy.dequeue(listCola.get(i)).size();j++)
+			extractStrategy.dequeue(listCola.get(i)).get(j).moveToNextRoad();
+		}
 	}
 
 	@Override
