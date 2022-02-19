@@ -5,18 +5,18 @@ import java.util.List;
 import org.json.JSONObject;
 
 public class TrafficSimulator{
+	private RoadMap roadMap;
+	private List<Event> eventList;
+	private int time;
 
 	public TrafficSimulator(RoadMap roadMap, List<Event> eventList) {
 		this.roadMap = roadMap;
 		this.eventList = eventList;
 		this.time = 0;
 	}
-	private RoadMap roadMap;
-	private List<Event> eventList;
-	private int time;
 	
 	public void addEvent(Event e) {
-		
+			eventList.add(e);
 	}
 	
 	public void advance() {
