@@ -25,6 +25,7 @@ public class Vehicle extends SimulatedObject{
 		this.contClass = contClass;
 		this.itinerary = itinerary;
 		this.local = 0;
+		this.state = VehicleStatus.PENDING;
 		this.distancia_total_recorrida = 0;
 	}
 	
@@ -33,6 +34,9 @@ public class Vehicle extends SimulatedObject{
 		int m = x.nextInt(this.maxSpeed-s)+s;
 		if(s < 0) {
 			throw new IllegalArgumentException("Speed cant be negative :" + m + "s"); 
+		}
+		else if(this.state!=VehicleStatus.TRAVELING){
+
 		}else {
 			this.nowSpeed = m;
 		}
@@ -69,13 +73,13 @@ public class Vehicle extends SimulatedObject{
 		}
 		
 		if(state == VehicleStatus.PENDING) {
-			this.itinerary.get(index).enter(this);
+			this.itinerary.get(index).enter(this); //enter wrong
 			state = VehicleStatus.TRAVELING;
 			this.local = 0;
 			index++;
 		}
 		else if(state == VehicleStatus.WAITING&&index<itinerary.size()){
-			this.itinerary.get(index-1).exit(this);
+			this.itinerary.get(index-1).exit(this); //exit wrong
 			this.itinerary.get(index).enter(this);
 			state = VehicleStatus.TRAVELING;
 			this.local = 0;

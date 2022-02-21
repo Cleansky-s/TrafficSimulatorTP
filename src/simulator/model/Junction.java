@@ -1,8 +1,6 @@
 package simulator.model;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.json.JSONObject;
 
@@ -18,14 +16,14 @@ public class Junction extends SimulatedObject{
 	
 	Junction(String id, LightSwitchingStrategy lightSwitchStrategy, DequeuingStrategy extractStrategy, int xCoor, int yCoor) {
 		super(id);
-		if(this.lightSwitchStrategy != null &&
-		this.extractStrategy != null &&
-		this.xCo >= 0 &&
-		this.yCo >= 0) {
+		if(lightSwitchStrategy != null &&extractStrategy != null &&xCoor >= 0 &&yCoor >= 0) {
 			this.lightSwitchStrategy = lightSwitchStrategy;
 			this.extractStrategy = extractStrategy;
 			this.xCo = xCoor;
 			this.yCo = yCoor;
+			this.MapRoadOut = new HashMap<Junction,Road>();
+			this.listRoadEnter = new ArrayList<Road>();
+			this.listCola = new ArrayList<List<Vehicle>>();
 		}
 		else {
 			throw new IllegalArgumentException("Argument can`t be null / Position can`t be negative");
@@ -34,7 +32,7 @@ public class Junction extends SimulatedObject{
 	
 	void addIncommingRoad(Road r) {
 		List<Vehicle> cola = new LinkedList<Vehicle>();
-		cola.addAll(r.getVehicle());
+		//cola.addAll(r.getVehicle());
 		this.listRoadEnter.add(r);
 		this.listCola.add(cola);
 	}
@@ -45,7 +43,6 @@ public class Junction extends SimulatedObject{
 		}else if(!this.equals(r.getSrcJunc())){
 			throw new IllegalArgumentException("This is not src junction for road");
 		}
-
 		MapRoadOut.put(r.getDestJunc(),r);
 	}
 	
@@ -60,7 +57,7 @@ public class Junction extends SimulatedObject{
 	
 	Road roadTo(Junction j) {
 
-		return MapRoadOut.get(this);
+		return MapRoadOut.get(j);
 	}
 
 	

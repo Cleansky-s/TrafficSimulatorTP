@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +29,10 @@ public abstract class Road extends SimulatedObject{
 			this.contLimit = contLimit;
 			this.length = length;
 			this.weather = weather;
+			this.limitSpeed = maxSpeed;
+			srcJunc.addOutGoingRoad(this);
+			destJunc.addIncommingRoad(this);
+			vehicle = new ArrayList<>();
 		}else throw new IllegalArgumentException("Road's argument ERROR");
 	}
 
@@ -111,7 +116,7 @@ public abstract class Road extends SimulatedObject{
 	}
 
 	public List<Vehicle> getVehicle() {
-		return Collections.unmodifiableList(vehicle);
+		return vehicle;
 	}
 
 	public void setSpeedLimit(int v) {

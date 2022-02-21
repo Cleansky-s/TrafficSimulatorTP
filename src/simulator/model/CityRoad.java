@@ -2,7 +2,7 @@ package simulator.model;
 
 public class CityRoad extends Road{
 
-	CityRoad(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {
+	CityRoad(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {  //id must be non-empty String
 		super(id, srcJunc, destJunc, maxSpeed, contLimit, length, weather);
 		// TODO Auto-generated constructor stub
 	}
