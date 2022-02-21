@@ -75,7 +75,7 @@ public class Junction extends SimulatedObject{
 	@Override
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-
+		
 		return o;
 	}
 

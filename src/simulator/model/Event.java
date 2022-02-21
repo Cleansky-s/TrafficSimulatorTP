@@ -17,7 +17,12 @@ public abstract class Event implements Comparable<Event> {
 
 	@Override
 	public int compareTo(Event o) {
-		// TODO complete
+		if(this._time < o.getTime()) {
+			return -1;
+		}
+		else if(this._time > o.getTime()) {
+			return 1;
+		}
 		return 0;
 	}
 
