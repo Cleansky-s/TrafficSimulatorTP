@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -14,7 +15,13 @@ public class TrafficSimulator{
 		this.eventList = eventList;
 		this.time = 0;
 	}
-	
+
+	public TrafficSimulator() {
+		this.roadMap = new RoadMap();
+		eventList = new ArrayList<Event>();
+		this.time = 0;
+	}
+
 	public void addEvent(Event e) {
 			eventList.add(e);
 	}

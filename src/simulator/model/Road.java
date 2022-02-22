@@ -44,6 +44,17 @@ public abstract class Road extends SimulatedObject{
 			vehicle.get(i).setSpeed(calculateVehicleSpeed(this.vehicle.get(i)));
 			vehicle.get(i).advance(time);
 		}
+		for(int i = 0;i < vehicle.size();i++){
+			int pos = i;
+			while((pos > 0)&&(this.vehicle.get(pos-1).getLocal() < this.vehicle.get(pos).getLocal())) {
+				Vehicle ve = this.vehicle.get(pos);
+				this.vehicle.add(pos-1,ve);
+				this.vehicle.remove(pos+1);
+				pos--;
+
+			}
+
+		}
 		//ORDDENAR LA LISTA DE VEHICULOS POR SU LOCALIZACION
 	}
 

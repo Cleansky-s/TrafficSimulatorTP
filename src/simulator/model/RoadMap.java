@@ -1,5 +1,7 @@
 package simulator.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,17 @@ public class RoadMap {
 		this.roadMap = roadMap;
 		this.vehicleMap = vehicleMap;
 	}
-	
+
+	public RoadMap() {
+		this.junctionList = new ArrayList<Junction>();
+		this.roadList = new ArrayList<Road>();
+		this.vehicleList = new ArrayList<Vehicle>() ;
+		this.juctionMap = new HashMap<String, Junction>();
+		this.roadMap = new HashMap<String, Road>();
+		this.vehicleMap = new HashMap<String, Vehicle>();
+
+	}
+
 	void addJunction(Junction j) {
 		junctionList.add(j);
 		juctionMap.put(j.getId(), j);
@@ -53,7 +65,8 @@ public class RoadMap {
 		return vehicleMap.getOrDefault(id, null);
 		
 	}
-	
+
+
 	public List<Junction> getJunctions() {
 		return junctionList;
 	}

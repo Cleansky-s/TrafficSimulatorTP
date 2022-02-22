@@ -31,15 +31,16 @@ public class Vehicle extends SimulatedObject{
 	
 	
 	void setSpeed(int s) {
-		int m = x.nextInt(this.maxSpeed-s)+s;
 		if(s < 0) {
-			throw new IllegalArgumentException("Speed cant be negative :" + m + "s"); 
+			throw new IllegalArgumentException("Speed cant be negative :" + s + "s");
 		}
 		else if(this.state!=VehicleStatus.TRAVELING){
 
-		}else {
-			this.nowSpeed = m;
 		}
+		else if(s > this.maxSpeed){
+			this.nowSpeed = maxSpeed;
+		}
+		else this.nowSpeed = s;
 	}
 	void setContaminationClass(int c) {
 		if(c>10||c<0) {
@@ -51,15 +52,14 @@ public class Vehicle extends SimulatedObject{
 
 	@Override
 	void advance(int time) {
-		if(state != VehicleStatus.TRAVELING) {
-			
-			int m = x.nextInt(road.getLength() - (this.local + this.nowSpeed) ) + this.local + this.nowSpeed;
-			int pollut = (m-local) * this.contClass;
-			this.local = m;
+		if(state == VehicleStatus.TRAVELING) {
+			int pollut = (local+this.nowSpeed-local) * this.contClass;
+			this.local += this.nowSpeed;
+			int m = this.nowSpeed - (this.local-this.road.getLength());
 			this.totalPollution += pollut;
 			road.addContam(pollut);
 			if(this.local >= road.getLength()) {
-				//Llama al junction
+				this.getRoad().getDestJunc().enter(this);
 				this.state = VehicleStatus.WAITING;
 				// ESTABLECER nowSpeed = 0;
 			}
@@ -73,10 +73,20 @@ public class Vehicle extends SimulatedObject{
 		}
 		
 		if(state == VehicleStatus.PENDING) {
-			this.itinerary.get(index).enter(this); //enter wrong
-			state = VehicleStatus.TRAVELING;
+			if(this.road == null){
+			this.road =  this.itinerary.get(0).roadTo(this.itinerary.get(1));
+			this.road.enter(this);
+			this.itinerary.remove(this);
 			this.local = 0;
-			index++;
+			}
+			else {
+				this.road.exit(this);
+				this.road = this.itinerary.get(0).roadTo(this.itinerary.get(1));
+				this.road.enter(this);
+				this.local = 0;
+				this.itinerary.remove(0);
+			}
+			this.state = VehicleStatus.TRAVELING;
 		}
 		else if(state == VehicleStatus.WAITING&&index<itinerary.size()){
 			this.itinerary.get(index-1).exit(this); //exit wrong
