@@ -31,11 +31,15 @@ public class TrafficSimulator{
 	}
 
 	public void reset() {
-		
+		this.time = 0;
+		this.roadMap.reset();
+		this.eventList.clear();
 	}
 
 	public JSONObject report() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject o = new JSONObject();
+		o.put("time", this.time);
+		o.put("state", this.roadMap.report());
+		return o;
 	}
 }

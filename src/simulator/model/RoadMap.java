@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 public class RoadMap {
 	
 	private List<Junction> junctionList;
@@ -16,7 +18,6 @@ public class RoadMap {
 	
 	RoadMap(List<Junction> junctionList, List<Road> roadList, List<Vehicle> vehicleList,
 			Map<String, Junction> juctionMap, Map<String, Road> roadMap, Map<String, Vehicle> vehicleMap) {
-		super();
 		this.junctionList = junctionList;
 		this.roadList = roadList;
 		this.vehicleList = vehicleList;
@@ -77,5 +78,29 @@ public class RoadMap {
 
 	public List<Vehicle> getVehicles() {
 		return vehicleList;
+	}
+	
+	void reset() {
+		this.juctionMap.clear();
+		this.junctionList.clear();
+		this.roadList.clear();
+		this.roadMap.clear();
+		this.vehicleList.clear();
+		this.vehicleMap.clear();
+	}
+	
+	public JSONObject report() {
+		JSONObject o = new JSONObject();
+		for(int i = 0; i < this.juctionMap.size(); i++) {
+			o.accumulate("junctions", this.juctionMap.get(i).report());
+		}
+		for(int i = 0; i < this.roadMap.size(); i++) {
+			o.accumulate("road", this.roadMap.get(i).report());
+		}
+		for(int i = 0; i < this.vehicleMap.size(); i++) {
+			o.accumulate("vehicles", this.vehicleMap.get(i).report());		
+		}
+		return o;
+		
 	}
 }

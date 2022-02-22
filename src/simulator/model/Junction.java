@@ -72,7 +72,21 @@ public class Junction extends SimulatedObject{
 	@Override
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-		
+		o.put("id", this._id);
+		if(this.indexGreenLight == -1) {
+			o.put("none", "");
+		}
+		else {
+			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
+		}
+		for(int i = 0; i < this.listRoadEnter.size(); i++) {
+			JSONObject r = new JSONObject();
+			r.put("road", this.listRoadEnter.get(i).getId());
+			for(int j = 0; j < this.listRoadEnter.get(i).getVehicle().size(); j++) {
+				r.accumulate("vehicles", this.listRoadEnter.get(i).getVehicle().get(j).getId());
+			}
+			o.accumulate("queues", r);
+		}
 		return o;
 	}
 

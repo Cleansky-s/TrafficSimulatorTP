@@ -104,8 +104,16 @@ public class Vehicle extends SimulatedObject{
 
 	@Override
 	public JSONObject report() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject o = new JSONObject();
+		o.put("id", this._id);
+		o.put("speed", this.nowSpeed);
+		o.put("distance", this.distancia_total_recorrida);
+		o.put("co2", this.totalPollution);
+		o.put("class", this.contClass);
+		o.put("status", this.state);
+		o.put("road", this.road.getId());
+		o.put("location", this.local);
+		return o;
 	}
 
 

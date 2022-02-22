@@ -127,7 +127,7 @@ public abstract class Road extends SimulatedObject{
 	}
 
 	public List<Vehicle> getVehicle() {
-		return vehicle;
+		return Collections.unmodifiableList(this.vehicle);
 	}
 
 	public void setSpeedLimit(int v) {
