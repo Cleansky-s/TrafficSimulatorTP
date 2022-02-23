@@ -44,11 +44,14 @@ public class RoadMap {
 	void addRoad(Road r) {
 		roadList.add(r);
 		roadMap.put(r.getId(), r);
+		this.getJunction(r.getSrcJunc().getId()).addOutGoingRoad(r);
+		this.getJunction(r.getDestJunc().getId()).addIncommingRoad(r);
 	}
 	
 	void addVehicle(Vehicle v) {
 		vehicleList.add(v);
 		vehicleMap.put(v.getId(), v);
+		v.moveToNextRoad();
 	}
 	
 	public Junction getJunction(String id) {
@@ -91,16 +94,15 @@ public class RoadMap {
 	
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-		for(int i = 0; i < this.juctionMap.size(); i++) {
-			o.accumulate("junctions", this.juctionMap.get(i).report());
+		for(int i = 0; i < this.roadList.size(); i++) {
+				o.put("road", this.roadMap.get(roadList.get(i).getId()).report());
 		}
-		for(int i = 0; i < this.roadMap.size(); i++) {
-			o.accumulate("road", this.roadMap.get(i).report());
+		for(int i = 0; i < this.junctionList.size(); i++) {
+			   o.put("junctions", this.juctionMap.get(junctionList.get(i).getId()).report());
 		}
-		for(int i = 0; i < this.vehicleMap.size(); i++) {
-			o.accumulate("vehicles", this.vehicleMap.get(i).report());		
+		for(int i = 0; i < this.vehicleList.size(); i++) {
+			  o.put("vehicles", this.vehicleMap.get(vehicleList.get(i).getId()).report());
 		}
 		return o;
-		
 	}
 }

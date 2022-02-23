@@ -14,7 +14,7 @@ class RoundRobinStrategyTest {
 
 	@Test
 	void test_1() {
-		
+
 		//  junctions
 		Junction j1 = new Junction("j1", new RoundRobinStrategy(10), new MoveFirstStrategy(), 0, 0);
 		Junction j2 = new Junction("j2", new RoundRobinStrategy(10), new MoveFirstStrategy(), 0, 0);
@@ -43,7 +43,7 @@ class RoundRobinStrategyTest {
 		List<List<Vehicle>> q = new ArrayList<>();
 		q.add( Utils.arrayToList(vs1));
 		q.add( Utils.arrayToList(vs2));
-		
+
 		RoundRobinStrategy st = new RoundRobinStrategy(2);
 
 		assertEquals(0, st.chooseNextGreen(rs, q, -1, 0, 11));

@@ -76,7 +76,6 @@ public class Vehicle extends SimulatedObject{
 			if(this.road == null){
 			this.road =  this.itinerary.get(0).roadTo(this.itinerary.get(1));
 			this.road.enter(this);
-			this.itinerary.remove(this);
 			this.local = 0;
 			}
 			else {

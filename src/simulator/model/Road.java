@@ -21,7 +21,6 @@ public abstract class Road extends SimulatedObject{
 	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed,
 			int contLimit, int length, Weather weather) {
 		super(id);
-		
 		if(maxSpeed > 0 && contLimit >= 0 && length > 0 && srcJunc != null && destJunc != null && weather != null) {
 			this.srcJunc = srcJunc;
 			this.destJunc = destJunc;
@@ -30,8 +29,6 @@ public abstract class Road extends SimulatedObject{
 			this.length = length;
 			this.weather = weather;
 			this.limitSpeed = maxSpeed;
-			srcJunc.addOutGoingRoad(this);
-			destJunc.addIncommingRoad(this);
 			vehicle = new ArrayList<>();
 		}else throw new IllegalArgumentException("Road's argument ERROR");
 	}
@@ -65,7 +62,10 @@ public abstract class Road extends SimulatedObject{
 		o.put("speedlimit", this.limitSpeed);
 		o.put("weather", this.weather);
 		o.put("co2", this.contLimit);
-		o.put("vehicles", this.vehicle);
+		for(int i = 0;i<vehicle.size();i++){
+
+			o.put("vehicles", this.vehicle.get(i).report());
+		}
 		return o;
 	}
 

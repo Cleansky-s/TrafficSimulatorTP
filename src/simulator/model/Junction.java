@@ -31,19 +31,19 @@ public class Junction extends SimulatedObject{
 	}
 	
 	void addIncommingRoad(Road r) {
-		List<Vehicle> cola = new LinkedList<Vehicle>();
-		//cola.addAll(r.getVehicle());
 		this.listRoadEnter.add(r);
-		this.listCola.add(cola);
+		listCola.add(r.getVehicle());
 	}
 	
 	void addOutGoingRoad(Road r) {
-		if(MapRoadOut.get(r.getDestJunc())!=null){
-			throw new IllegalArgumentException("There is other road connect to r");
+		if(MapRoadOut.get(r.getDestJunc().getId())!=null){
+			throw new IllegalArgumentException("There is other road connect to road");
 		}else if(!this.equals(r.getSrcJunc())){
 			throw new IllegalArgumentException("This is not src junction for road");
 		}
 		MapRoadOut.put(r.getDestJunc(),r);
+		listCola.add(r.getVehicle());
+
 	}
 	
 	void enter(Vehicle v) {
@@ -63,10 +63,21 @@ public class Junction extends SimulatedObject{
 	
 	@Override
 	void advance(int time) {
-		for(int i = 0;i<listRoadEnter.size();i++){
-			for(int j = 0;j<extractStrategy.dequeue(listCola.get(i)).size();j++)
-			extractStrategy.dequeue(listCola.get(i)).get(j).moveToNextRoad();
+		if(listCola.size()!=0){
+			if(listCola.get(0).size() > 0){
+			extractStrategy.dequeue(listCola.get(0));
+			}
+
 		}
+		else if(listCola.size()>1){
+			for(int i = 0;i<listCola.size();i++){
+				if(listCola.get(0).size() > 0){
+					extractStrategy.dequeue(listCola.get(i));
+				}
+			}
+		}
+
+		lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastLightChange,time);
 	}
 
 	@Override

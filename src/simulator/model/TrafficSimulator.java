@@ -27,7 +27,21 @@ public class TrafficSimulator{
 	}
 	
 	public void advance() {
-		
+		this.time++;
+		for(int i = 0;i<eventList.size();i++){
+			if(eventList.get(i).getTime() == this.time){
+				eventList.get(i).execute(roadMap);
+				eventList.remove(i);
+				i--;
+			}
+		}
+
+		for(int i = 0;i < roadMap.getJunctions().size();i++){
+			roadMap.getJunctions().get(i).advance(time);
+		}
+		for(int i = 0;i < roadMap.getRoads().size();i++){
+			roadMap.getRoads().get(i).advance(time);
+		}
 	}
 
 	public void reset() {
@@ -38,7 +52,7 @@ public class TrafficSimulator{
 
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-		o.put("time", this.time);
+		o.put("time",this.time);
 		o.put("state", this.roadMap.report());
 		return o;
 	}
