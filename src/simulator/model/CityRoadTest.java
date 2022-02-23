@@ -55,6 +55,8 @@ class CityRoadTest {
 		// a road
 		Road r1 = new CityRoad("r1", j1, j2, 100, 10, 1000, Weather.SUNNY);
 
+		j1.addOutGoingRoad(r1);
+		j2.addIncommingRoad(r1);
 		// a vehicle
 		Vehicle v1 = new Vehicle("v1", 50, 1, Arrays.asList(j1, j2));
 		Vehicle v2 = new Vehicle("v2", 100, 3, Arrays.asList(j1, j2));
@@ -106,6 +108,8 @@ class CityRoadTest {
 		// a road
 		Road r1 = new CityRoad("r1", j1, j2, 100, 10, 1000, Weather.SUNNY);
 
+		j1.addOutGoingRoad(r1);
+		j2.addIncommingRoad(r1);
 		// a vehicle
 		Vehicle v1 = new Vehicle("v1", 50, 1, Arrays.asList(j1, j2));
 		Vehicle v2 = new Vehicle("v2", 100, 3, Arrays.asList(j1, j2));

@@ -58,14 +58,13 @@ public abstract class Road extends SimulatedObject{
 	@Override
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-		o.put("id", this._id);
-		o.put("speedlimit", this.limitSpeed);
-		o.put("weather", this.weather);
-		o.put("co2", this.contLimit);
+		o.accumulate("speedlimit", this.limitSpeed);
+		o.accumulate("weather", this.weather);
+		o.accumulate("co2", this.totalPoll);
 		for(int i = 0;i<vehicle.size();i++){
-
-			o.put("vehicles", this.vehicle.get(i).report());
+			o.accumulate("vehicles", this.vehicle.get(i).getId());
 		}
+		o.accumulate("id", this._id);
 		return o;
 	}
 

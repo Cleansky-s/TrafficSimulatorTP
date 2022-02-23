@@ -95,13 +95,13 @@ public class RoadMap {
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
 		for(int i = 0; i < this.roadList.size(); i++) {
-				o.put("road", this.roadMap.get(roadList.get(i).getId()).report());
+				o.accumulate("road", this.roadMap.get(roadList.get(i).getId()).report());
 		}
 		for(int i = 0; i < this.junctionList.size(); i++) {
-			   o.put("junctions", this.juctionMap.get(junctionList.get(i).getId()).report());
+			   o.accumulate("junctions", this.juctionMap.get(junctionList.get(i).getId()).report());
 		}
 		for(int i = 0; i < this.vehicleList.size(); i++) {
-			  o.put("vehicles", this.vehicleMap.get(vehicleList.get(i).getId()).report());
+			  o.accumulate("vehicles", this.vehicleMap.get(vehicleList.get(i).getId()).report());
 		}
 		return o;
 	}

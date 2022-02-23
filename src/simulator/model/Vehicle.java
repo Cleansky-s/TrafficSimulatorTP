@@ -55,6 +55,7 @@ public class Vehicle extends SimulatedObject{
 		if(state == VehicleStatus.TRAVELING) {
 			int pollut = (local+this.nowSpeed-local) * this.contClass;
 			this.local += this.nowSpeed;
+			distancia_total_recorrida += nowSpeed;
 			int m = this.nowSpeed - (this.local-this.road.getLength());
 			this.totalPollution += pollut;
 			road.addContam(pollut);

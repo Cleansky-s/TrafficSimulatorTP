@@ -124,6 +124,8 @@ class VehicleTest {
 		// no vehicle on the road yet
 		assertEquals(0, r1.getVehicle().size());
 
+		j1.addOutGoingRoad(r1);
+		j2.addIncommingRoad(r1);
 		// enter the road
 		v1.moveToNextRoad();
 
