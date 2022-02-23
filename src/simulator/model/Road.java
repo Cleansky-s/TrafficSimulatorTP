@@ -62,8 +62,9 @@ public abstract class Road extends SimulatedObject{
 		o.accumulate("weather", this.weather);
 		o.accumulate("co2", this.totalPoll);
 		for(int i = 0;i<vehicle.size();i++){
-			o.accumulate("vehicles", this.vehicle.get(i).getId());
+			o.append("vehicles", this.vehicle.get(i).getId());
 		}
+		
 		o.accumulate("id", this._id);
 		return o;
 	}

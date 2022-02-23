@@ -87,21 +87,18 @@ public class Junction extends SimulatedObject{
 		o.put("id", this._id);
 		if(this.indexGreenLight == -1) {
 			o.put("green", "none");
-			if(listRoadEnter==null){
-				o.accumulate("queues","[]");
-			}
 		}
 		else {
 			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
 
 		for(int i = 0; i < this.listRoadEnter.size(); i++) {
 			JSONObject r = new JSONObject();
-			r.put("road", this.listRoadEnter.get(i).getId());
+			r.append("road", this.listRoadEnter.get(i).getId());
 			for(int j = 0; j < this.listRoadEnter.get(i).getVehicle().size(); j++) {
 				if(this.listRoadEnter.get(i).getVehicle().get(j).getState()==VehicleStatus.WAITING){
-				r.accumulate("vehicles", this.listRoadEnter.get(i).getVehicle().get(j).getId());}
+				r.append("vehicles", this.listRoadEnter.get(i).getVehicle().get(j).getId());}
 			}
-			o.accumulate("queues", r);
+			o.append("queues", r);
 		}
 		}
 		return o;
