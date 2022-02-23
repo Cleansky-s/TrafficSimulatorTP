@@ -22,7 +22,6 @@ public class Junction extends SimulatedObject{
 			this.xCo = xCoor;
 			this.yCo = yCoor;
 			this.MapRoadOut = new HashMap<Junction,Road>();
-			this.listRoadEnter = new ArrayList<Road>();
 			this.listCola = new ArrayList<List<Vehicle>>();
 		}
 		else {
@@ -31,6 +30,8 @@ public class Junction extends SimulatedObject{
 	}
 	
 	void addIncommingRoad(Road r) {
+		if(listRoadEnter == null){
+		this.listRoadEnter = new ArrayList<Road>();}
 		this.listRoadEnter.add(r);
 		listCola.add(r.getVehicle());
 	}
@@ -77,7 +78,7 @@ public class Junction extends SimulatedObject{
 			}
 		}
 
-		lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastLightChange,time);
+		indexGreenLight = lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastLightChange,time);
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class Junction extends SimulatedObject{
 		}
 		else {
 			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
-		}
+
 		for(int i = 0; i < this.listRoadEnter.size(); i++) {
 			JSONObject r = new JSONObject();
 			r.put("road", this.listRoadEnter.get(i).getId());
@@ -97,6 +98,7 @@ public class Junction extends SimulatedObject{
 				r.accumulate("vehicles", this.listRoadEnter.get(i).getVehicle().get(j).getId());
 			}
 			o.accumulate("queues", r);
+		}
 		}
 		return o;
 	}
