@@ -1,7 +1,8 @@
 package simulator.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.json.JSONObject;
 
@@ -16,17 +17,22 @@ public class Vehicle extends SimulatedObject{
 	private int contClass;
 	private int totalPollution;
 	private int distancia_total_recorrida;
-	private int index = 0;
-	private Random x = new Random();
+	private int index;
 
 	Vehicle(String id, int maxSpeed, int contClass,List<Junction> itinerary) {
 		super(id);
-		this.maxSpeed = maxSpeed;
-		this.contClass = contClass;
-		this.itinerary = itinerary;
-		this.local = 0;
-		this.state = VehicleStatus.PENDING;
-		this.distancia_total_recorrida = 0;
+		if(maxSpeed > 0 && (contClass >= 0 || contClass <= 10) && itinerary.size() >= 2) {
+			this.maxSpeed = maxSpeed;
+			this.contClass = contClass;
+			this.itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));;
+			this.local = 0;
+			this.state = VehicleStatus.PENDING;
+			this.distancia_total_recorrida = 0;
+			this.totalPollution = 0;
+			this.road = null;
+		}
+		else throw new IllegalArgumentException("Vehicle argument error");
+			
 	}
 	
 	
@@ -34,14 +40,12 @@ public class Vehicle extends SimulatedObject{
 		if(s < 0) {
 			throw new IllegalArgumentException("Speed cant be negative :" + s + "s");
 		}
-		else if(this.state!=VehicleStatus.TRAVELING){
-
-		}
 		else if(s > this.maxSpeed){
 			this.nowSpeed = maxSpeed;
 		}
 		else this.nowSpeed = s;
 	}
+	
 	void setContaminationClass(int c) {
 		if(c>10||c<0) {
 			throw new IllegalArgumentException("Grade must between 0 - 10: " + c); 
@@ -53,57 +57,53 @@ public class Vehicle extends SimulatedObject{
 	@Override
 	void advance(int time) {
 		if(state == VehicleStatus.TRAVELING) {
-			int pollut = (local+this.nowSpeed-local) * this.contClass;
-			this.local += this.nowSpeed;
-			distancia_total_recorrida += nowSpeed;
-			int m = this.nowSpeed - (this.local-this.road.getLength());
-			this.totalPollution += pollut;
-			road.addContam(pollut);
-			if(this.local >= road.getLength()) {
-				this.state = VehicleStatus.WAITING;
-				this.local = 0;
-				this.nowSpeed = 0;
-				this.itinerary.get(0).enter(this);
-				// ESTABLECER nowSpeed = 0;
+			//(a)
+			int i1 = this.local + this.nowSpeed;
+			int i2 = this.road.getLength();
+			int aux = this.local;
+			if(i1 < i2) {
+				this.local = i1;
 			}
+			else
+				this.local = i2;
+			// (b)
+			int c = this.contClass * (this.local - aux);
+			this.totalPollution += c;
+			this.road.addContam(c);
+			//(c)
+			if(this.local >= this.road.getLength()) {
+				this.road.getDestJunc().enter(this);
+				this.state = VehicleStatus.WAITING;
+			}
+			
 		}
 		
 	}
 	
 	void moveToNextRoad() {
-		if(state!=VehicleStatus.PENDING&&state !=VehicleStatus.WAITING) {
-			throw new IllegalArgumentException("State must be Waiting or Pending :" + this._id);
+		if(state!=VehicleStatus.PENDING && state !=VehicleStatus.WAITING) {
+			throw new IllegalArgumentException("VehicleStatus must be Waiting or Pending for move road:" + this._id);
 		}
 		
 		if(state == VehicleStatus.PENDING) {
-			if(this.road == null){
-			this.road =  this.itinerary.get(0).roadTo(this.itinerary.get(1));
+			this.road = this.itinerary.get(0).roadTo(this.itinerary.get(1));
 			this.road.enter(this);
-			this.local = 0;
-			index++;
-			}
-			else {
-				this.road.exit(this);
-				this.road = this.itinerary.get(0).roadTo(this.itinerary.get(1));
-				this.road.enter(this);
-				this.local = 0;
-				this.itinerary.remove(0);
-				index++;
-			}
+			index = 1;
 			this.state = VehicleStatus.TRAVELING;
+			this.local = 0;
 		}
 		else if(state == VehicleStatus.WAITING&&index<itinerary.size()-1){
 			this.road.exit(this);
-			this.road = this.itinerary.get(0).roadTo(this.itinerary.get(1));
-			this.road.enter(this);
+			this.road = this.itinerary.get(index).roadTo(this.itinerary.get(index+1));
+			index++;
 			state = VehicleStatus.TRAVELING;
 			this.local = 0;
-			this.itinerary.remove(0);
-			index++;
+		
 		}
-		else if(index >= itinerary.size()){
+		else if(index >= itinerary.size()-1){
 			state = VehicleStatus.ARRIVED;
 			this.road.exit(this);
+			this.road = null;
 		}
 		
 		
@@ -118,8 +118,10 @@ public class Vehicle extends SimulatedObject{
 		o.put("co2", this.totalPollution);
 		o.put("class", this.contClass);
 		o.put("status", this.state.toString());
-		o.put("road", this.road.getId());
-		o.put("location", this.local);
+		if(this.road != null)
+			o.put("road", this.road.getId());
+		if(this.local != 0)
+			o.put("location", this.local);
 		return o;
 	}
 
