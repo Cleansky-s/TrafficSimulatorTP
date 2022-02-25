@@ -11,8 +11,16 @@ public class RoundRobinStrategyBuilder extends Builder<LightSwitchingStrategy>{
 
     @Override
     protected LightSwitchingStrategy createTheInstance(JSONObject data) {
+        JSONObject m = new JSONObject(data);
         LightSwitchingStrategy o = null;
-            o = new RoundRobinStrategy(data.getInt("timeslot"));
+        if(data.has("timeslot")){
+        o = new RoundRobinStrategy(data.getInt("timeslot"));
+        }else  o = new RoundRobinStrategy(1);
+
         return o;
+    }
+
+    protected LightSwitchingStrategy createTheInstance() {
+        return null;
     }
 }

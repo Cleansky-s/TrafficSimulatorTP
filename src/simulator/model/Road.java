@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class Road extends SimulatedObject{
@@ -57,15 +58,17 @@ public abstract class Road extends SimulatedObject{
 
 	@Override
 	public JSONObject report() {
+		JSONArray a = new JSONArray();
 		JSONObject o = new JSONObject();
-		o.accumulate("speedlimit", this.limitSpeed);
-		o.accumulate("weather", this.weather);
-		o.accumulate("co2", this.totalPoll);
+
+		o.put("speedlimit", this.limitSpeed);
+		o.put("weather", this.weather);
+		o.put("co2", this.totalPoll);
 		for(int i = 0;i<vehicle.size();i++){
-			o.append("vehicles", this.vehicle.get(i).getId());
+			a.put(this.vehicle.get(i).getId());
 		}
-		
-		o.accumulate("id", this._id);
+		o.put("vehicles",a);
+		o.put("id", this._id);
 		return o;
 	}
 

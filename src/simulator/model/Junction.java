@@ -2,6 +2,7 @@ package simulator.model;
 
 import java.util.*;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Junction extends SimulatedObject{
@@ -84,21 +85,27 @@ public class Junction extends SimulatedObject{
 	@Override
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
+		JSONObject om = new JSONObject();
+		JSONArray r = new JSONArray();
+		JSONArray v = new JSONArray();
 		o.put("id", this._id);
 		if(this.indexGreenLight == -1) {
 			o.put("green", "none");
+			o.put("queues", r);
 		}
 		else {
 			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
 
 		for(int i = 0; i < this.listRoadEnter.size(); i++) {
-			JSONObject r = new JSONObject();
-			r.append("road", this.listRoadEnter.get(i).getId());
+			om.put("road", this.listRoadEnter.get(i).getId());
 			for(int j = 0; j < this.listRoadEnter.get(i).getVehicle().size(); j++) {
 				if(this.listRoadEnter.get(i).getVehicle().get(j).getState()==VehicleStatus.WAITING){
-				r.append("vehicles", this.listRoadEnter.get(i).getVehicle().get(j).getId());}
+					v.put(this.listRoadEnter.get(i).getVehicle().get(j).getId());
+				}
 			}
-			o.append("queues", r);
+			om.put("vehicles", v);
+			r.put(om);
+			o.put("queues", r);
 		}
 		}
 		return o;
