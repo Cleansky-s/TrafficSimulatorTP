@@ -60,8 +60,10 @@ public class Vehicle extends SimulatedObject{
 			this.totalPollution += pollut;
 			road.addContam(pollut);
 			if(this.local >= road.getLength()) {
-				this.getRoad().getDestJunc().enter(this);
 				this.state = VehicleStatus.WAITING;
+				this.local = 0;
+				this.nowSpeed = 0;
+				this.itinerary.get(0).enter(this);
 				// ESTABLECER nowSpeed = 0;
 			}
 		}
@@ -70,7 +72,7 @@ public class Vehicle extends SimulatedObject{
 	
 	void moveToNextRoad() {
 		if(state!=VehicleStatus.PENDING&&state !=VehicleStatus.WAITING) {
-			throw new IllegalArgumentException("State must be Waiting or Pending :" + this._id); 
+			throw new IllegalArgumentException("State must be Waiting or Pending :" + this._id);
 		}
 		
 		if(state == VehicleStatus.PENDING) {
@@ -78,6 +80,7 @@ public class Vehicle extends SimulatedObject{
 			this.road =  this.itinerary.get(0).roadTo(this.itinerary.get(1));
 			this.road.enter(this);
 			this.local = 0;
+			index++;
 			}
 			else {
 				this.road.exit(this);
@@ -85,18 +88,22 @@ public class Vehicle extends SimulatedObject{
 				this.road.enter(this);
 				this.local = 0;
 				this.itinerary.remove(0);
+				index++;
 			}
 			this.state = VehicleStatus.TRAVELING;
 		}
-		else if(state == VehicleStatus.WAITING&&index<itinerary.size()){
-			this.itinerary.get(index-1).exit(this); //exit wrong
-			this.itinerary.get(index).enter(this);
+		else if(state == VehicleStatus.WAITING&&index<itinerary.size()-1){
+			this.road.exit(this);
+			this.road = this.itinerary.get(0).roadTo(this.itinerary.get(1));
+			this.road.enter(this);
 			state = VehicleStatus.TRAVELING;
 			this.local = 0;
+			this.itinerary.remove(0);
 			index++;
 		}
 		else if(index >= itinerary.size()){
 			state = VehicleStatus.ARRIVED;
+			this.road.exit(this);
 		}
 		
 		
@@ -110,7 +117,7 @@ public class Vehicle extends SimulatedObject{
 		o.put("distance", this.distancia_total_recorrida);
 		o.put("co2", this.totalPollution);
 		o.put("class", this.contClass);
-		o.put("status", this.state);
+		o.put("status", this.state.toString());
 		o.put("road", this.road.getId());
 		o.put("location", this.local);
 		return o;

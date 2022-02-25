@@ -22,8 +22,10 @@ public class Junction extends SimulatedObject{
 			this.extractStrategy = extractStrategy;
 			this.xCo = xCoor;
 			this.yCo = yCoor;
+			this.listRoadEnter = new ArrayList<Road>();
 			this.MapRoadOut = new HashMap<Junction,Road>();
 			this.listCola = new ArrayList<List<Vehicle>>();
+			this.listCola.add(new ArrayList<Vehicle>());
 		}
 		else {
 			throw new IllegalArgumentException("Argument can`t be null / Position can`t be negative");
@@ -31,10 +33,7 @@ public class Junction extends SimulatedObject{
 	}
 	
 	void addIncommingRoad(Road r) {
-		if(listRoadEnter == null){
-		this.listRoadEnter = new ArrayList<Road>();}
 		this.listRoadEnter.add(r);
-		listCola.add(r.getVehicle());
 	}
 	
 	void addOutGoingRoad(Road r) {
@@ -44,18 +43,15 @@ public class Junction extends SimulatedObject{
 			throw new IllegalArgumentException("This is not src junction for road");
 		}
 		MapRoadOut.put(r.getDestJunc(),r);
-		listCola.add(r.getVehicle());
 
 	}
 	
 	void enter(Vehicle v) {
-		  listRoadEnter.get(listRoadEnter.size()-1).enter(v);
+		if(listRoadEnter!=null){
+		  listCola.get(this.listRoadEnter.indexOf(v.getRoad())).add(v);
+		}else listCola.get(0).add(v);
 	}
-	
-	void exit(Vehicle v) {
-		  listRoadEnter.get(listRoadEnter.size()-1).exit(v);
-	}
-	
+
 	
 	Road roadTo(Junction j) {
 
@@ -65,17 +61,24 @@ public class Junction extends SimulatedObject{
 	
 	@Override
 	void advance(int time) {
+		List<List<Vehicle>> listOut = new ArrayList<List<Vehicle>>();
 		if(listCola.size()!=0){
 			if(listCola.get(0).size() > 0){
-			extractStrategy.dequeue(listCola.get(0));
+				listOut.add(extractStrategy.dequeue(listCola.get(0)));
 			}
 
 		}
 		else if(listCola.size()>1){
 			for(int i = 0;i<listCola.size();i++){
 				if(listCola.get(0).size() > 0){
-					extractStrategy.dequeue(listCola.get(i));
+					listOut.add(extractStrategy.dequeue(listCola.get(i)));
 				}
+			}
+		}
+		for(int i = 0;i<listOut.size();i++){
+			for(int j = 0;j<listOut.get(i).size();j++){
+				listOut.get(i).get(j).moveToNextRoad();
+				listOut.get(i).remove(j);
 			}
 		}
 
@@ -90,6 +93,9 @@ public class Junction extends SimulatedObject{
 		JSONArray v = new JSONArray();
 		o.put("id", this._id);
 		if(this.indexGreenLight == -1) {
+			o.put("green", "none");
+			o.put("queues", r);
+		}else if(this.listRoadEnter.size() == 0){
 			o.put("green", "none");
 			o.put("queues", r);
 		}
