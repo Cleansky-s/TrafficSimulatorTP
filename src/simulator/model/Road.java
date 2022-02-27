@@ -31,6 +31,8 @@ public abstract class Road extends SimulatedObject{
 			this.weather = weather;
 			this.limitSpeed = maxSpeed;
 			vehicle = new ArrayList<>();
+			srcJunc.addOutGoingRoad(this);
+			destJunc.addIncommingRoad(this);
 		}else throw new IllegalArgumentException("Road's argument ERROR");
 	}
 

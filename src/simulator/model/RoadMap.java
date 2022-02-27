@@ -1,6 +1,7 @@
 package simulator.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,18 +17,8 @@ public class RoadMap {
 	private Map<String, Junction> juctionMap;
 	private Map<String, Road> roadMap;
 	private Map<String, Vehicle> vehicleMap;
-	
-	RoadMap(List<Junction> junctionList, List<Road> roadList, List<Vehicle> vehicleList,
-			Map<String, Junction> juctionMap, Map<String, Road> roadMap, Map<String, Vehicle> vehicleMap) {
-		this.junctionList = junctionList;
-		this.roadList = roadList;
-		this.vehicleList = vehicleList;
-		this.juctionMap = juctionMap;
-		this.roadMap = roadMap;
-		this.vehicleMap = vehicleMap;
-	}
 
-	public RoadMap() {
+	RoadMap() {
 		this.junctionList = new ArrayList<Junction>();
 		this.roadList = new ArrayList<Road>();
 		this.vehicleList = new ArrayList<Vehicle>() ;
@@ -38,21 +29,37 @@ public class RoadMap {
 	}
 
 	void addJunction(Junction j) {
-		junctionList.add(j);
-		juctionMap.put(j.getId(), j);
+		if(!this.juctionMap.containsKey(j.getId())) {
+			junctionList.add(j);
+			juctionMap.put(j.getId(), j);
+		}
 	}
 	
 	void addRoad(Road r) {
-		roadList.add(r);
-		roadMap.put(r.getId(), r);
-		this.getJunction(r.getSrcJunc().getId()).addOutGoingRoad(r);
-		this.getJunction(r.getDestJunc().getId()).addIncommingRoad(r);
+		if(!this.roadMap.containsKey(r.getId()) && this.juctionMap.containsKey(r.getDestJunc().getId()) && this.juctionMap.containsKey(r.getSrcJunc().getId())) {
+			roadList.add(r);
+			roadMap.put(r.getId(), r);
+			
+			
+		}
+		else
+			throw new IllegalArgumentException("Error while adding road");
 	}
 	
 	void addVehicle(Vehicle v) {
+		boolean ok = true;
+		for(int i = 0; i < v.getItinerary().size()-1; i++) {
+			if(!this.roadMap.containsKey(v.getItinerary().get(i).roadTo(v.getItinerary().get(i+1)).getId())) {
+				ok = false;
+			}
+		}
+		if(!this.vehicleMap.containsKey(v.getId()) && ok) {
 		vehicleList.add(v);
 		vehicleMap.put(v.getId(), v);
 		v.moveToNextRoad();
+		}
+		else
+			throw new IllegalArgumentException("Error while adding vehicle");
 	}
 	
 	public Junction getJunction(String id) {
@@ -73,15 +80,15 @@ public class RoadMap {
 
 
 	public List<Junction> getJunctions() {
-		return junctionList;
+		return Collections.unmodifiableList(new ArrayList<>(junctionList));
 	}
 
 	public List<Road> getRoads() {
-		return roadList;
+		return Collections.unmodifiableList(new ArrayList<>(roadList));
 	}
 
 	public List<Vehicle> getVehicles() {
-		return vehicleList;
+		return Collections.unmodifiableList(new ArrayList<>(vehicleList));
 	}
 	
 	void reset() {

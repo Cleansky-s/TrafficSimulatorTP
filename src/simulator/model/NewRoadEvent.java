@@ -1,6 +1,7 @@
 package simulator.model;
 
 public class NewRoadEvent extends Event{
+	
 	private String srcJunc,destJunc; //dest and origin junction
 	private int length;
 	private String id;

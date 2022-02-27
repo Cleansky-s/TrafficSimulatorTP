@@ -33,28 +33,31 @@ public class Junction extends SimulatedObject{
 	}
 	
 	void addIncommingRoad(Road r) {
-		this.listRoadEnter.add(r);
+		if(r.getDestJunc() == this) {
+			this.listRoadEnter.add(r);
+		}
+		else
+			throw new IllegalArgumentException("Error: road's DestJunction is not the same");
 	}
 	
 	void addOutGoingRoad(Road r) {
-		if(MapRoadOut.get(r.getDestJunc().getId())!=null){
+		if(MapRoadOut.get(r.getDestJunc())!=null){
 			throw new IllegalArgumentException("There is other road connect to road");
 		}else if(!this.equals(r.getSrcJunc())){
 			throw new IllegalArgumentException("This is not src junction for road");
 		}
-		MapRoadOut.put(r.getDestJunc(),r);
+		else {
+			MapRoadOut.put(r.getDestJunc(),r);
+		}
 
 	}
 	
 	void enter(Vehicle v) {
-		if(listRoadEnter!=null){
-		  listCola.get(this.listRoadEnter.indexOf(v.getRoad())).add(v);
-		}else listCola.get(0).add(v);
+		listCola.get(this.listRoadEnter.indexOf(v.getRoad())).add(v);
 	}
 
 	
 	Road roadTo(Junction j) {
-
 		return MapRoadOut.get(j);
 	}
 

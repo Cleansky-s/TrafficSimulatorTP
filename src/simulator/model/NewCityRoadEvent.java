@@ -1,8 +1,7 @@
 package simulator.model;
 
-import java.util.List;
 
-public class NewCityRoadEvent extends NewRoadEvent{ // HAY QUE CREAR UNA SUPERCLASE: NewRoadEvent
+public class NewCityRoadEvent extends NewRoadEvent{
 
 	private String srcJunc,destJunc; //dest and origin junction
 	private int length;
@@ -16,13 +15,6 @@ public class NewCityRoadEvent extends NewRoadEvent{ // HAY QUE CREAR UNA SUPERCL
 			{
 				super(time,  id,  srcJun,
 				destJunc,  length,  co2Limit,  maxSpeed,  weather);
-				this.id = id;
-				this.srcJunc = srcJun;
-				this.destJunc = destJunc;
-				this.length = length;
-				this.contLimit = co2Limit;
-				this.maxSpeed = maxSpeed;
-				this.weather = weather;
 			}
 
 	@Override

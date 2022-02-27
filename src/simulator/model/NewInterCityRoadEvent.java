@@ -1,6 +1,6 @@
 package simulator.model;
 
-public class NewInterCityRoadEvent extends NewRoadEvent{ // HAY QUE CREAR UNA SUPERCLASE: NewRoadEvent
+public class NewInterCityRoadEvent extends NewRoadEvent{
 	
 	private String srcJunc,destJunc; //dest and origin junction
 	private int length;
