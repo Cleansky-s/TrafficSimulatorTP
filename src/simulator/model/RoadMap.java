@@ -39,8 +39,6 @@ public class RoadMap {
 		if(!this.roadMap.containsKey(r.getId()) && this.juctionMap.containsKey(r.getDestJunc().getId()) && this.juctionMap.containsKey(r.getSrcJunc().getId())) {
 			roadList.add(r);
 			roadMap.put(r.getId(), r);
-			
-			
 		}
 		else
 			throw new IllegalArgumentException("Error while adding road");
@@ -54,9 +52,8 @@ public class RoadMap {
 			}
 		}
 		if(!this.vehicleMap.containsKey(v.getId()) && ok) {
-		vehicleList.add(v);
-		vehicleMap.put(v.getId(), v);
-		v.moveToNextRoad();
+			vehicleList.add(v);
+			vehicleMap.put(v.getId(), v);
 		}
 		else
 			throw new IllegalArgumentException("Error while adding vehicle");

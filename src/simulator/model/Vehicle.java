@@ -70,8 +70,9 @@ public class Vehicle extends SimulatedObject{
 			this.road.addContam(c);
 			//(c)
 			if(this.local >= this.road.getLength()) {
-				this.road.getDestJunc().enter(this);
+				this.nowSpeed = 0;
 				this.state = VehicleStatus.WAITING;
+				this.road.getDestJunc().enter(this);
 			}
 			
 		}

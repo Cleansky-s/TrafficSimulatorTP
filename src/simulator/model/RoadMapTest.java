@@ -70,6 +70,8 @@ class RoadMapTest {
 		// check the report
 		System.out.print(map.report());
 		String s = "{\"roads\":[{\"speedlimit\":100,\"co2\":0,\"weather\":\"SUNNY\",\"vehicles\":[],\"id\":\"r1\"},{\"speedlimit\":100,\"co2\":0,\"weather\":\"SUNNY\",\"vehicles\":[],\"id\":\"r2\"}],\"vehicles\":[{\"distance\":0,\"co2\":0,\"id\":\"v1\",\"class\":1,\"speed\":0,\"status\":\"PENDING\"},{\"distance\":0,\"co2\":0,\"id\":\"v2\",\"class\":1,\"speed\":0,\"status\":\"PENDING\"},{\"distance\":0,\"co2\":0,\"id\":\"v3\",\"class\":1,\"speed\":0,\"status\":\"PENDING\"},{\"distance\":0,\"co2\":0,\"id\":\"v4\",\"class\":1,\"speed\":0,\"status\":\"PENDING\"}],\"junctions\":[{\"green\":\"none\",\"queues\":[],\"id\":\"j1\"},{\"green\":\"none\",\"queues\":[{\"road\":\"r1\",\"vehicles\":[]}],\"id\":\"j2\"},{\"green\":\"none\",\"queues\":[{\"road\":\"r2\",\"vehicles\":[]}],\"id\":\"j3\"}]}";
+		System.out.println("");
+		System.out.print(s);
 		assertTrue( new JSONObject(s).similar(map.report()));
 	
 	}

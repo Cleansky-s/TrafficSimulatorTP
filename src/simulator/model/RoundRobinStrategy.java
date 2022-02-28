@@ -13,7 +13,7 @@ public class RoundRobinStrategy implements LightSwitchingStrategy{
 	public int chooseNextGreen(List<Road> roads, List<List<Vehicle>> qs, int currGreen, int lastSwitchingTime,
 			int currTime) {
 		
-		if(roads == null) {
+		if(roads == null||roads.size() == 0) {
 			
 			return -1;
 		}

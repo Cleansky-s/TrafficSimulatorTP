@@ -14,7 +14,15 @@ public class NewInterCityRoadEvent extends NewRoadEvent{
 			{
 		super(time,  id,  srcJun, 
 			destJunc,  length,  co2Limit,  maxSpeed,  weather);
+		this.id = id;
+		this.srcJunc = srcJun;
+		this.destJunc = destJunc;
+		this.length = length;
+		this.contLimit = co2Limit;
+		this.maxSpeed = maxSpeed;
+		this.weather = weather;
 			}
+	
 
 	@Override
 	void execute(RoadMap map) {

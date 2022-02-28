@@ -9,7 +9,7 @@ public class Junction extends SimulatedObject{
 	private List<Road> listRoadEnter;
 	private Map<Junction,Road> MapRoadOut; //Key = Junction, Value = Road
 	private List<List<Vehicle>> listCola;
-	private int indexGreenLight;
+	private int indexGreenLight = -1;
 	private int lastLightChange;
 	private LightSwitchingStrategy lightSwitchStrategy;
 	private DequeuingStrategy extractStrategy;
@@ -55,8 +55,6 @@ public class Junction extends SimulatedObject{
 	void enter(Vehicle v) {
 		listCola.get(this.listRoadEnter.indexOf(v.getRoad())).add(v);
 	}
-
-	
 	Road roadTo(Junction j) {
 		return MapRoadOut.get(j);
 	}
@@ -65,15 +63,16 @@ public class Junction extends SimulatedObject{
 	@Override
 	void advance(int time) {
 		List<List<Vehicle>> listOut = new ArrayList<List<Vehicle>>();
+		if(indexGreenLight > -1&&indexGreenLight < listCola.size()) {
 		if(listCola.size()!=0){
-			if(listCola.get(0).size() > 0){
+			if(listCola.get(indexGreenLight).size() > 0){
 				listOut.add(extractStrategy.dequeue(listCola.get(0)));
 			}
 
 		}
 		else if(listCola.size()>1){
 			for(int i = 0;i<listCola.size();i++){
-				if(listCola.get(0).size() > 0){
+				if(listCola.get(indexGreenLight).size() > 0){
 					listOut.add(extractStrategy.dequeue(listCola.get(i)));
 				}
 			}
@@ -81,10 +80,11 @@ public class Junction extends SimulatedObject{
 		for(int i = 0;i<listOut.size();i++){
 			for(int j = 0;j<listOut.get(i).size();j++){
 				listOut.get(i).get(j).moveToNextRoad();
+				listCola.get(indexGreenLight).remove(listOut.get(i).get(j));
 				listOut.get(i).remove(j);
 			}
 		}
-
+		}
 		indexGreenLight = lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastLightChange,time);
 	}
 
@@ -104,7 +104,7 @@ public class Junction extends SimulatedObject{
 		}
 		else {
 			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
-
+		}
 		for(int i = 0; i < this.listRoadEnter.size(); i++) {
 			om.put("road", this.listRoadEnter.get(i).getId());
 			for(int j = 0; j < this.listRoadEnter.get(i).getVehicle().size(); j++) {
@@ -116,7 +116,7 @@ public class Junction extends SimulatedObject{
 			r.put(om);
 			o.put("queues", r);
 		}
-		}
+		
 		return o;
 	}
 
