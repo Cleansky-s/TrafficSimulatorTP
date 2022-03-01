@@ -5,13 +5,12 @@ import simulator.model.LightSwitchingStrategy;
 import simulator.model.MostCrowdedStrategy;
 
 public class MostCrowdedStrategyBuilder extends Builder<LightSwitchingStrategy>{
-    MostCrowdedStrategyBuilder(String type) {
+    MostCrowdedStrategyBuilder() {
         super("most_crowded_lss");
     }
 
     @Override
     protected LightSwitchingStrategy createTheInstance(JSONObject data) {
-        JSONObject m = new JSONObject(data);
         LightSwitchingStrategy o = null;
         if(data.has("timeslot")){
             o = new MostCrowdedStrategy(data.getInt("timeslot"));

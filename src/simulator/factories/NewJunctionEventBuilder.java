@@ -1,19 +1,39 @@
 package simulator.factories;
 
 import org.json.JSONObject;
+
+import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
+import simulator.model.LightSwitchingStrategy;
+import simulator.model.NewJunctionEvent;
 
 public class NewJunctionEventBuilder extends Builder<Event>{
-    NewJunctionEventBuilder(String type) {
-        super("new_junction");
+	
+	private Factory<LightSwitchingStrategy> lssFactory;
+	private Factory<DequeuingStrategy> dqsFactory;
+    public NewJunctionEventBuilder(Factory<LightSwitchingStrategy>
+    lssFactory, Factory<DequeuingStrategy> dqsFactory) {
+    	super("new_junction");
+    	this.lssFactory = lssFactory;
+    	this.dqsFactory = dqsFactory;
     }
 
+    
+    
     protected Event createTheInstance(JSONObject data) {
-        int id,coox,cooy,time;
-        id = data.getJSONObject("data").getInt("time");
+    	NewJunctionEvent n = null;
+    	String id;
+        int coox,cooy,time;
+        LightSwitchingStrategy lsStrat;
+        DequeuingStrategy dqStrat;
+        id = data.getJSONObject("data").getString("id");
         coox = data.getJSONObject("data").getJSONArray("coor").getInt(0);
-        cooy = data.getJSONObject("data").getJSONArray("coor").getInt(0);
-        return null;
+        cooy = data.getJSONObject("data").getJSONArray("coor").getInt(1);
+        time = data.getJSONObject("data").getInt("time");
+        lsStrat = lssFactory.createInstance(data.getJSONObject("data").getJSONObject("ls_strategy"));
+        dqStrat = dqsFactory.createInstance(data.getJSONObject("data").getJSONObject("dq_strategy"));
+        n = new NewJunctionEvent(time, id, lsStrat, dqStrat, coox, cooy);
+        return n;
     }
 
 }
