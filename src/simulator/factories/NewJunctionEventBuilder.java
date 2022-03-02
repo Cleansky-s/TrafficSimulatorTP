@@ -26,12 +26,12 @@ public class NewJunctionEventBuilder extends Builder<Event>{
         int coox,cooy,time;
         LightSwitchingStrategy lsStrat;
         DequeuingStrategy dqStrat;
-        id = data.getJSONObject("data").getString("id");
-        coox = data.getJSONObject("data").getJSONArray("coor").getInt(0);
-        cooy = data.getJSONObject("data").getJSONArray("coor").getInt(1);
-        time = data.getJSONObject("data").getInt("time");
-        lsStrat = lssFactory.createInstance(data.getJSONObject("data").getJSONObject("ls_strategy"));
-        dqStrat = dqsFactory.createInstance(data.getJSONObject("data").getJSONObject("dq_strategy"));
+        id = data.getString("id");
+        coox = data.getJSONArray("coor").getInt(0);
+        cooy = data.getJSONArray("coor").getInt(1);
+        time = data.getInt("time");
+        lsStrat = lssFactory.createInstance(data.getJSONObject("ls_strategy"));
+        dqStrat = dqsFactory.createInstance(data.getJSONObject("dq_strategy"));
         n = new NewJunctionEvent(time, id, lsStrat, dqStrat, coox, cooy);
         return n;
     }
