@@ -1,9 +1,5 @@
 package simulator.factories;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -13,6 +9,8 @@ import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
 import simulator.model.LightSwitchingStrategy;
 import simulator.model.TrafficSimulator;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class NewVehicleEventBuilderTest {
 

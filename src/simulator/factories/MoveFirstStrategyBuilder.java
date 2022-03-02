@@ -5,7 +5,7 @@ import simulator.model.DequeuingStrategy;
 import simulator.model.MoveFirstStrategy;
 
 public class MoveFirstStrategyBuilder extends Builder<DequeuingStrategy>{
-    MoveFirstStrategyBuilder() {
+    public MoveFirstStrategyBuilder() {
         super("move_first_dqs");
     }
 

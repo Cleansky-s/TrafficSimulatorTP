@@ -5,7 +5,7 @@ import simulator.model.LightSwitchingStrategy;
 import simulator.model.MostCrowdedStrategy;
 
 public class MostCrowdedStrategyBuilder extends Builder<LightSwitchingStrategy>{
-    MostCrowdedStrategyBuilder() {
+    public MostCrowdedStrategyBuilder() {
         super("most_crowded_lss");
     }
 

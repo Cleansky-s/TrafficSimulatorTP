@@ -5,7 +5,7 @@ import simulator.model.LightSwitchingStrategy;
 import simulator.model.RoundRobinStrategy;
 
 public class RoundRobinStrategyBuilder extends Builder<LightSwitchingStrategy>{
-    RoundRobinStrategyBuilder() {
+    public RoundRobinStrategyBuilder() {
         super("round_robin_lss");
     }
 
