@@ -33,6 +33,7 @@ public class Main {
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
 			parseOutFileOption(line);
+			parseTicksOption(line);
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
@@ -59,7 +60,8 @@ public class Main {
 		cmdLineOptions.addOption(
 				Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
-
+		cmdLineOptions.addOption(Option.builder("t").longOpt("ticks").hasArg().desc("Ticks to the simulator’s main loop (default\n" + 
+				"value is 10).").build());
 		return cmdLineOptions;
 	}
 
@@ -81,9 +83,16 @@ public class Main {
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
 		_outFile = line.getOptionValue("o");
 	}
+	
+	private static void parseTicksOption(CommandLine line) throws ParseException {
+		if (line.hasOption("t")) {
+			initFactories();
+			System.exit(0);
+		}
+	}
 
 	private static void initFactories() {
-
+		
 		// TODO complete this method to initialize _eventsFactory
 
 	}
