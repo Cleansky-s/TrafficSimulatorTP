@@ -1,6 +1,6 @@
 package simulator.launcher;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,20 +106,23 @@ public class Main {
 		lsbs.add( new MostCrowdedStrategyBuilder() );
 		Factory<LightSwitchingStrategy> lssFactory = new BuilderBasedFactory<>(lsbs);
 		List<Builder<Event>> ebs = new ArrayList<>();
-		ebs.add( new NewJunctionEventBuilder(lssFactory,dqsFactory) );
-		ebs.add( new NewCityRoadEventBuilder() );
-		ebs.add( new NewInterCityRoadEventBuilder() );
+		ebs.add( new NewJunctionEventBuilder(lssFactory,dqsFactory));
+		ebs.add( new NewCityRoadEventBuilder());
+		ebs.add( new NewInterCityRoadEventBuilder());
 		ebs.add( new SetContClassEventBuilder());
 		ebs.add( new SetWeatherEventBuilder());
-		Factory<Event> eventsFactory = new BuilderBasedFactory<>(ebs);
+		Factory<Event> _eventsFactory = new BuilderBasedFactory<>(ebs);
 	}
 
 	private static void startBatchMode() throws IOException {
+		InputStream in = new FileInputStream(new File(_inFile));
+		if(_outFile == null){
+			OutputStream out = System.out;
+		}else{
+			OutputStream out = new FileOutputStream(new File(_outFile));
+		}
 
 
-
-
-		// TODO complete this method to start the simulation
 	}
 
 	private static void start(String[] args) throws IOException {
