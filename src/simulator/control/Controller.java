@@ -21,7 +21,7 @@ public class Controller {
 			this.eventFactory = eventsFactory;
 			this.ts = sim;
 		}
-		else throw new IllegalArgumentException("Controller arguments can´t be null");
+		else throw new IllegalArgumentException("Controller arguments canï¿½t be null");
 	}
 	public void loadEvents(InputStream in) {
 		JSONObject jo = new JSONObject(new JSONTokener(in));
@@ -30,18 +30,26 @@ public class Controller {
 		for(int i = 0; i < eventArray.length(); i++) {
 			v = eventFactory.createInstance(eventArray.getJSONObject(i));
 			ts.addEvent(v);
-			//Este método debe lanzar una excepción si la entrada JSON no encaja con la de arriba.
+			//Este mï¿½todo debe lanzar una excepciï¿½n si la entrada JSON no encaja con la de arriba.
 		}
 	}
 	
 	public void run(int n, OutputStream out) {
 		PrintStream p = new PrintStream(out);
+		JSONObject o = new JSONObject();
+		p.println("{\n" + 
+				"  \"states\": [");
 		for(int i = 0; i < n; i++) {
 			ts.advance();
-			JSONObject o = new JSONObject();
-			o.accumulate("states", ts.report());
-			p.println(o.toString());
+			o.append("states", ts.report());
+			p.print(o.getJSONArray("states").get(i).toString());
+			if(i != (n-1)) {
+				p.println(",");
+			}
+			else p.println();
 		}
+		p.println("]\n" + 
+				"}");
 	}
 	
 	public void reset() {

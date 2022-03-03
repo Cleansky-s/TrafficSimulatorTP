@@ -38,10 +38,12 @@ public class Vehicle extends SimulatedObject{
 		if(s < 0) {
 			throw new IllegalArgumentException("Speed cant be negative :" + s + "s");
 		}
-		else if(s > this.maxSpeed){
-			this.nowSpeed = maxSpeed;
+		if(this.state == VehicleStatus.TRAVELING) {
+			if(s > this.maxSpeed){
+				this.nowSpeed = maxSpeed;
+			}
+			else this.nowSpeed = s;
 		}
-		else this.nowSpeed = s;
 	}
 	
 	void setContaminationClass(int c) {

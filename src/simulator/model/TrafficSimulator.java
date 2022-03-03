@@ -10,12 +10,6 @@ public class TrafficSimulator{
 	private List<Event> eventList;
 	private int time;
 
-	public TrafficSimulator(RoadMap roadMap, List<Event> eventList) {
-		this.roadMap = roadMap;
-		this.eventList = eventList;
-		this.time = 0;
-	}
-
 	public TrafficSimulator() {
 		this.roadMap = new RoadMap();
 		eventList = new ArrayList<Event>();

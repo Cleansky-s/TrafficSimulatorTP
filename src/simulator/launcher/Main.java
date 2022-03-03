@@ -12,10 +12,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import simulator.control.Controller;
 import simulator.factories.*;
 import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
 import simulator.model.LightSwitchingStrategy;
+import simulator.model.TrafficSimulator;
 
 public class Main {
 
@@ -23,6 +25,7 @@ public class Main {
 	private static String _inFile = null;
 	private static String _outFile = null;
 	private static Factory<Event> _eventsFactory = null;
+	private static Integer time;
 
 	private static void parseArgs(String[] args) {
 
@@ -90,9 +93,9 @@ public class Main {
 	}
 	
 	private static void parseTicksOption(CommandLine line) throws ParseException {
-		if (line.hasOption("t")) {
-			initFactories();
-			System.exit(0);
+		time = Integer.parseInt(line.getOptionValue("t"));
+		if(time == null) {
+			time = _timeLimitDefaultValue;
 		}
 	}
 
@@ -109,18 +112,25 @@ public class Main {
 		ebs.add( new NewJunctionEventBuilder(lssFactory,dqsFactory));
 		ebs.add( new NewCityRoadEventBuilder());
 		ebs.add( new NewInterCityRoadEventBuilder());
+		ebs.add( new NewVehicleEventBuilder());
 		ebs.add( new SetContClassEventBuilder());
 		ebs.add( new SetWeatherEventBuilder());
-		Factory<Event> _eventsFactory = new BuilderBasedFactory<>(ebs);
+		_eventsFactory = new BuilderBasedFactory<>(ebs);
 	}
 
 	private static void startBatchMode() throws IOException {
+		TrafficSimulator ts = new TrafficSimulator();
+		Controller control = new Controller(ts, _eventsFactory);
 		InputStream in = new FileInputStream(new File(_inFile));
+		OutputStream out;
 		if(_outFile == null){
-			OutputStream out = System.out;
+			out = System.out;
 		}else{
-			OutputStream out = new FileOutputStream(new File(_outFile));
+			out = new FileOutputStream(new File(_outFile));
 		}
+		control.loadEvents(in);
+		control.run(time, out);
+
 	}
 
 	private static void start(String[] args) throws IOException {

@@ -11,7 +11,7 @@ import simulator.model.NewVehicleEvent;
 
 public class NewVehicleEventBuilder extends Builder<Event>{
 
-	NewVehicleEventBuilder() {
+	public NewVehicleEventBuilder() {
 		super("new_vehicle");
 	}
 

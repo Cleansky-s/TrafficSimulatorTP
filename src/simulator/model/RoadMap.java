@@ -32,7 +32,7 @@ public class RoadMap {
 		if(!this.juctionMap.containsKey(j.getId())) {
 			junctionList.add(j);
 			juctionMap.put(j.getId(), j);
-		}
+		}else throw new IllegalArgumentException("Error while adding junction");
 	}
 	
 	void addRoad(Road r) {

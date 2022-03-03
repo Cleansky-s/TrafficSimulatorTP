@@ -25,7 +25,7 @@ public class Junction extends SimulatedObject{
 			this.listRoadEnter = new ArrayList<Road>();
 			this.MapRoadOut = new HashMap<Junction,Road>();
 			this.listCola = new ArrayList<List<Vehicle>>();
-			this.listCola.add(new ArrayList<Vehicle>());
+			
 		}
 		else {
 			throw new IllegalArgumentException("Argument can`t be null / Position can`t be negative");
@@ -35,6 +35,7 @@ public class Junction extends SimulatedObject{
 	void addIncommingRoad(Road r) {
 		if(r.getDestJunc() == this) {
 			this.listRoadEnter.add(r);
+			this.listCola.add(new ArrayList<Vehicle>());
 		}
 		else
 			throw new IllegalArgumentException("Error: road's DestJunction is not the same");
