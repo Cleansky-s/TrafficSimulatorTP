@@ -121,8 +121,6 @@ public class Main {
 		}else{
 			OutputStream out = new FileOutputStream(new File(_outFile));
 		}
-
-
 	}
 
 	private static void start(String[] args) throws IOException {
