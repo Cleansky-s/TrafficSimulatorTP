@@ -18,6 +18,9 @@ public class SetContClassEventBuilder extends Builder<Event>{
 
 	@Override
 	protected Event createTheInstance(JSONObject data) {
+		if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
 		SetContClassEvent n = null;
 		int time = data.getInt("time");
 		List<Pair<String, Integer>> pairs = new ArrayList<Pair<String, Integer>>();

@@ -27,8 +27,9 @@ public class InterCityRoad extends Road{
 			x = 20;
 			break;
 		}
-		x = ((100 - x)*this.getTotalPoll())/100;
-		this.addContam(-x);
+		int c = ((100 - x)*this.getTotalPoll())/100;
+		c = this.getTotalPoll() - c;
+		this.addContam(-c);
 	}
 
 	@Override

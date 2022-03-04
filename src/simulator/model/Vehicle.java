@@ -16,6 +16,7 @@ public class Vehicle extends SimulatedObject{
 	private int local;
 	private int contClass;
 	private int totalPollution;
+	private int totalDistance;
 	private int index;
 
 	Vehicle(String id, int maxSpeed, int contClass,List<Junction> itinerary) {
@@ -25,6 +26,7 @@ public class Vehicle extends SimulatedObject{
 			this.contClass = contClass;
 			this.itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));;
 			this.local = 0;
+			this.totalDistance = 0;
 			this.state = VehicleStatus.PENDING;
 			this.totalPollution = 0;
 			this.road = null;
@@ -63,9 +65,13 @@ public class Vehicle extends SimulatedObject{
 			int aux = this.local;
 			if(i1 < i2) {
 				this.local = i1;
+				this.totalDistance += this.nowSpeed;
 			}
-			else
+			else {
+				this.totalDistance += (i2 - this.local);
 				this.local = i2;
+				
+			}
 			// (b)
 			int c = this.contClass * (this.local - aux);
 			this.totalPollution += c;
@@ -115,13 +121,13 @@ public class Vehicle extends SimulatedObject{
 		JSONObject o = new JSONObject();
 		o.put("id", this._id);
 		o.put("speed", this.nowSpeed);
-		o.put("distance", this.local);
+		o.put("distance", this.totalDistance);
 		o.put("co2", this.totalPollution);
 		o.put("class", this.contClass);
 		o.put("status", this.state.toString());
 		if(this.road != null)
 			o.put("road", this.road.getId());
-		if(this.local != 0)
+		if(this.local != 0 && this.state != VehicleStatus.ARRIVED)
 			o.put("location", this.local);
 		return o;
 	}

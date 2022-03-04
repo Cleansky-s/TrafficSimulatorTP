@@ -21,6 +21,9 @@ public class NewJunctionEventBuilder extends Builder<Event>{
     
     
     protected Event createTheInstance(JSONObject data) {
+    	if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
     	NewJunctionEvent n = null;
     	String id;
         int coox,cooy,time;

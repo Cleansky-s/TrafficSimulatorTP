@@ -9,8 +9,8 @@ public class Junction extends SimulatedObject{
 	private List<Road> listRoadEnter;
 	private Map<Junction,Road> MapRoadOut; //Key = Junction, Value = Road
 	private List<List<Vehicle>> listCola;
-	private int indexGreenLight = -1;
-	private int lastLightChange;
+	private int indexGreenLight;
+	private int lastSwitchLightTime;
 	private LightSwitchingStrategy lightSwitchStrategy;
 	private DequeuingStrategy extractStrategy;
 	private int xCo,yCo;
@@ -25,6 +25,8 @@ public class Junction extends SimulatedObject{
 			this.listRoadEnter = new ArrayList<Road>();
 			this.MapRoadOut = new HashMap<Junction,Road>();
 			this.listCola = new ArrayList<List<Vehicle>>();
+			this.indexGreenLight = -1;
+			this.lastSwitchLightTime = 0;
 			
 		}
 		else {
@@ -63,38 +65,33 @@ public class Junction extends SimulatedObject{
 	
 	@Override
 	void advance(int time) {
-		List<List<Vehicle>> listOut = new ArrayList<List<Vehicle>>();
+		List<Vehicle> listOut;
 		if(indexGreenLight > -1&&indexGreenLight < listCola.size()) {
-		if(listCola.size()!=0){
 			if(listCola.get(indexGreenLight).size() > 0){
-				listOut.add(extractStrategy.dequeue(listCola.get(0)));
-			}
-
-		}
-		else if(listCola.size()>1){
-			for(int i = 0;i<listCola.size();i++){
-				if(listCola.get(indexGreenLight).size() > 0){
-					listOut.add(extractStrategy.dequeue(listCola.get(i)));
+				listOut = extractStrategy.dequeue(listCola.get(indexGreenLight));
+				listCola.get(indexGreenLight).removeAll(listOut);
+				for(Vehicle v : listOut) { 
+					v.moveToNextRoad();
+					if(v.getRoad() != null) {
+						v.getRoad().enter(v);
+					}
 				}
+				
 			}
 		}
-		for(int i = 0;i<listOut.size();i++){
-			for(int j = 0;j<listOut.get(i).size();j++){
-				listOut.get(i).get(j).moveToNextRoad();
-				listCola.get(indexGreenLight).remove(listOut.get(i).get(j));
-				listOut.get(i).remove(j);
-			}
+		int nextGreen = lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastSwitchLightTime,time);
+		if(this.indexGreenLight != nextGreen) {
+			indexGreenLight = nextGreen;
+			this.lastSwitchLightTime = time;
 		}
-		}
-		indexGreenLight = lightSwitchStrategy.chooseNextGreen(this.listRoadEnter,listCola,indexGreenLight,lastLightChange,time);
 	}
 
 	@Override
 	public JSONObject report() {
 		JSONObject o = new JSONObject();
-		JSONObject om = new JSONObject();
+		
 		JSONArray r = new JSONArray();
-		JSONArray v = new JSONArray();
+		
 		o.put("id", this._id);
 		if(this.indexGreenLight == -1) {
 			o.put("green", "none");
@@ -107,6 +104,8 @@ public class Junction extends SimulatedObject{
 			o.put("green", this.listRoadEnter.get(this.indexGreenLight).getId());
 		}
 		for(int i = 0; i < this.listRoadEnter.size(); i++) {
+			JSONObject om = new JSONObject();
+			JSONArray v = new JSONArray();
 			om.put("road", this.listRoadEnter.get(i).getId());
 			for(int j = 0; j < this.listRoadEnter.get(i).getVehicle().size(); j++) {
 				if(this.listRoadEnter.get(i).getVehicle().get(j).getState()==VehicleStatus.WAITING){

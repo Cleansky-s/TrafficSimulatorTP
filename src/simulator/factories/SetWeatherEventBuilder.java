@@ -19,6 +19,9 @@ public class SetWeatherEventBuilder extends Builder<Event>{
 
 	@Override
 	protected Event createTheInstance(JSONObject data) {
+		if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
 		SetWeatherEvent n = null;
 		int time = data.getInt("time");
 		JSONArray o = new JSONArray();

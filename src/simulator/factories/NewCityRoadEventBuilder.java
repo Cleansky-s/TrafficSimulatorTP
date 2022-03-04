@@ -14,6 +14,9 @@ public class NewCityRoadEventBuilder extends Builder<Event>{
 	}
 
 	protected Event createTheInstance(JSONObject data) {
+		if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
 		NewCityRoadEvent n = null;
 		int time = data.getInt("time");
 		String id = data.getString("id");

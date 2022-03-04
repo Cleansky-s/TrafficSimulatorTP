@@ -3,7 +3,6 @@ package simulator.factories;
 import org.json.JSONObject;
 
 import simulator.model.Event;
-import simulator.model.NewCityRoadEvent;
 import simulator.model.NewInterCityRoadEvent;
 import simulator.model.Weather;
 
@@ -15,6 +14,9 @@ public class NewInterCityRoadEventBuilder extends Builder<Event>{
 
 	@Override
 	protected Event createTheInstance(JSONObject data) {
+		if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
 		NewInterCityRoadEvent n = null;
 		int time = data.getInt("time");
 		String id = data.getString("id");

@@ -11,6 +11,9 @@ public class RoundRobinStrategyBuilder extends Builder<LightSwitchingStrategy>{
 
     @Override
     protected LightSwitchingStrategy createTheInstance(JSONObject data) {
+    	if(data.isEmpty()) {
+        	throw new IllegalArgumentException("Data is empty");
+        }
         LightSwitchingStrategy o = null;
         if(data.has("timeslot")){
         o = new RoundRobinStrategy(data.getInt("timeslot"));
